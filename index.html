@@ -191,7 +191,6 @@
     }
     .lesson-button.is-active .lesson-number { background: var(--surface-solid); color: var(--accent); }
     .lesson-name { display: block; font-size: 14px; font-weight: 650; line-height: 1.28; overflow-wrap: anywhere; }
-    .lesson-meta { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.25; }
 
     .reader { min-width: 0; }
     .reader-card {
@@ -212,14 +211,6 @@
       background: linear-gradient(180deg, #ffffff 0%, #fbfbfd 100%);
     }
     .crumb { color: var(--muted); font-size: 13px; font-weight: 650; }
-    .file-ref {
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 48vw;
-    }
 
     .article {
       max-width: 880px;
@@ -335,7 +326,6 @@
       .mobile-picker { display: block; }
       .reader, .reader-card, .mobile-picker, .lesson-select { width: 100%; max-width: 100%; min-width: 0; }
       .reader-toolbar { align-items: flex-start; flex-direction: column; padding: 14px 16px; gap: 6px; }
-      .file-ref { max-width: 100%; white-space: normal; }
       .article { padding: 30px 20px 44px; overflow-wrap: break-word; word-break: normal; }
       .article h1 { font-size: 31px; }
       .article h2 { font-size: 23px; margin-top: 36px; }
@@ -380,7 +370,6 @@
       <article class="reader-card">
         <div class="reader-toolbar">
           <div class="crumb" id="crumb">Kinh doanh · Tổng quan</div>
-          <div class="file-ref" id="fileRef"></div>
         </div>
         <div class="article" id="article"></div>
       </article>
@@ -408,7 +397,6 @@
       sidebarTitle: document.getElementById('sidebarTitle'),
       lessonCount: document.getElementById('lessonCount'),
       crumb: document.getElementById('crumb'),
-      fileRef: document.getElementById('fileRef'),
       tocTitle: document.getElementById('tocTitle'),
       tocList: document.getElementById('tocList')
     };
@@ -593,7 +581,6 @@
           <span class="lesson-number">${String(lesson.order).padStart(2, '0')}</span>
           <span>
             <span class="lesson-name">${escapeHtml(lesson.title)}</span>
-            <span class="lesson-meta">${escapeHtml(lesson.sourcePath)} · ${lesson.lineCount} dòng</span>
           </span>
         </button>`).join('') : '<div class="empty-state">Không tìm thấy bài phù hợp.</div>';
 
@@ -609,7 +596,6 @@
     function renderArticle(lesson) {
       els.article.innerHTML = renderMarkdown(lesson.rawMarkdown, lesson.headings);
       els.crumb.textContent = `${labels[lesson.category]} · ${lesson.title}`;
-      els.fileRef.textContent = lesson.sourcePath;
     }
 
     function render() {
@@ -620,7 +606,7 @@
       const lesson = activeLesson();
       els.tabs.forEach(tab => tab.setAttribute('aria-selected', String(tab.dataset.category === state.category)));
       els.sidebarTitle.textContent = labels[state.category];
-      els.lessonCount.textContent = `${getLessons().length} bài · ${DATA.counts.total} file nguồn`;
+      els.lessonCount.textContent = `${getLessons().length} bài`;
       els.clearSearch.classList.toggle('is-visible', Boolean(state.query));
       renderLessonList();
       if (lesson) {
